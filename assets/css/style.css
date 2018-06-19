@@ -7,28 +7,41 @@ body {
 
 #row {
    display: flex;
+   justify-content: center;
+   width: 800px;
 }
 
 #row h1{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 50px;
+    font-weight: 700;
 
+}
+
+#row h1:hover {
+    color: red;
 }
 
 /* placing section center screen */
 
 .container {
    display: flex;
+   align-content: center;
+   justify-content: center;
+
 }
 
 /* internal section styling */
 
 section {
-
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    border: 1px solid black;
+    background: gray;
+    height: 300px;
+    align-content: center;
 }
-
-#game {
-   display: flex;
-}
-
 
 #wins {
 

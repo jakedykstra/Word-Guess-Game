@@ -6,7 +6,7 @@ $(document).ready(function () {
                         console.log(userGuess);
 
                         if (!userGuess.match(/[a-zA-Z]/)) {
-                              prompt("Please enter a letter")
+                              alert("Please only enter letters")
                         } else {
 
                               // setting up variables for letters guessed, word, user wins in an object
@@ -14,7 +14,7 @@ $(document).ready(function () {
                               var game = {
                                     wins: 0,
                                     words: ["John Snow", "Cersei", "You know nothing", "dragon", "imp", "iron throne", "westeros", "Game of Thrones"],
-                                    currentWords: "",
+                                    currentWords: currentWord,
                                     guessesRemaining: 10,
                                     lettersGuessed: ""
                               }
@@ -28,39 +28,43 @@ $(document).ready(function () {
                               var charMap = {};
 
                               for (let char of randomWord) {
-                                    charMap[char] = "_";
+                                    charMap[char] = "_ ";
                                     if (userGuess == char) {
-                                          charMap[char] = userGuess;
-                                    } else {
-                                          game.lettersGuessed += userGuess;
+                                          charMap[char] = userGuess + ' ';
+                                    } else if(char == " "){
+                                          charMap[char] = "  ";
+                                    } else { game.lettersGuessed += userGuess;
                                           game.guessRemaining--;
                                     }
                               };
 
-                              if (game.guessesRemaining == 0) {
-                                    prompt("GAME OVER!");
-                                    setTimeout(function () {
-                                          game.guessesRemaining = 10;
-                                          randomWord = game.words[Math.floor(Math.random() * items.length)];
-                                          game.lettersGuessed = '';
-                                    }, 3000);
-                              } else if (!charMap[char] == "_"){
-                                    prompt("WINNER!");
-                                    setTimeout(function () {
-                                          game.guessesRemaining = 10;
-                                          randomWord = game.words[Math.floor(Math.random() * items.length)];
-                                          game.lettersGuessed = '';
-
-                                    }, 3000);
-                              };
+                              var currentWord = Object.values(charMap).join('');
+                              console.log(currentWord);
+ 
 
                               
                               // jQuery pointers setup
-                              $("#word-guess h1").text("Word: " + wordGuess);
-                              $("#wins h2").text("Wins!: " + game.wins);
+                              $("#word-guess h1").text("Word: " + currentWord);
+                              $("#wins h2").text("Wins: " + game.wins);
                               $("#guessesRemaining h3").text("Number of guesses remaining: " + game.guessesRemaining);
                               $("#letters-guessed h3").text("Letters already guessed: " + game.lettersGuessed);
 
+                              if (game.guessesRemaining == 0) {
+                                    alert("GAME OVER!");
+                                    setTimeout(function () {
+                                          game.guessesRemaining = 10;
+                                          randomWord = game.words[Math.floor(Math.random() * items.length)];
+                                          game.lettersGuessed = '';
+                                    }, 30000);
+                              } else if (!Object.values(charMap).includes("_")){
+                                    alert("WINNER!");
+                                    setTimeout(function () {
+                                          game.guessesRemaining = 10;
+                                          randomWord = game.words[Math.floor(Math.random() * items.length)];
+                                          game.lettersGuessed = '';
+                                          wins++;
+                                    }, 30000);
+                              } else { return};
                         }
                   };
             });
@@ -74,3 +78,7 @@ $(document).ready(function () {
 
             // if guesses = 0 then prompt gameover ,reset randomWord
             // if word to guess object value doesn't hold "_" prompt winner and incrament winner up, reset random word
+
+            //ignore spaces
+
+            //have it not run for all
