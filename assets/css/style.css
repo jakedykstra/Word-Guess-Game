@@ -1,0 +1,47 @@
+/* selecting everything */
+body {
+
+}
+
+/* Game of Thrones header*/
+
+#row {
+   display: flex;
+}
+
+#row h1{
+
+}
+
+/* placing section center screen */
+
+.container {
+   display: flex;
+}
+
+/* internal section styling */
+
+section {
+
+}
+
+#game {
+   display: flex;
+}
+
+
+#wins {
+
+}
+
+#word {
+
+}
+
+#guessesRemaining {
+
+}
+
+#letters-guessed {
+
+}
