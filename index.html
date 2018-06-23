@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
     <script src="assets/javascript/game.js"></script>
 
 </head>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="background-image" style="background-image: url(assets/images/game-of-thrones-wallpapers.jpg);"></div>
-       <div class="container">
+    <div class="container">
         <section id="game">
             <h1>Press any key to get started!</h1>
 
@@ -41,8 +41,16 @@
                 <h3>Number of guesses remaining: </h3>
             </div>
 
+            <audio controls autoplay loop>
+                <source src="assets/audio/Game of Thrones Main Title - Ringtone Best Version.mp3" type="audio/mpeg">
+            </audio>
+
         </section>
     </div>
+    <script>
+        resetGame();
+        updateDisplay();
+    </script>
 </body>
 
 </html>

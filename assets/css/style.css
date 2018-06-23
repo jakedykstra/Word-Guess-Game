@@ -16,10 +16,20 @@ body {
     font-weight: 700;
     text-align: center;
     margin-top: 150px;
+    animation: 1s fadein 0.5s forwards;
+    opacity: 0;
+}
+
+@keyframes fadein {
+	100% {
+		opacity: 1;
+	}
 }
 
 #row h1:hover {
     color: red;
+    transition-timing-function: ease;
+    transition-delay: .5s;
 }
 
 /* background image */
@@ -46,20 +56,23 @@ body {
 /* internal section styling */
 
 section {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    border: 1px solid black;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    border: 6px solid black;
     background: #4b1a10;
     height: 500px;
-    width: 500px;
-    margin-top: 100px;
-    align-content: center;
+    width: 550px;
+    margin-top: 75px;
+    align-items: flex-start;
     color: #c6c2c1;
-    opacity: .95;
-    padding-left: 50px;
+    opacity: .925;
+    padding: 0 50px;
     font-size: 2em;
     /* background-blend-mode: darken; */
+}
+
+audio {
+    align-self: center;
 }
 
 #wins {

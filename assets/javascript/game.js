@@ -1,102 +1,139 @@
-// key event function listening for keys
-$(document).ready(function () {
+      
+      // setting up variables for letters guessed, word, user wins, booleans, etc.
 
-      // setting up variables for letters guessed, word, user wins in an object
+      var words = ["joffrey", "cersei", "arya", "dragon", "imp", "lanisters", "westeros", "stark", ];
+      var totalGuesses = 10;
+      var guessesRemaining = 0;
+      var randomWord;
+      var wordBeingGuessed = [];
+      var lettersGuessed = [];
+      var gameStart = false;
+      var gameEnd = false;
+      var wins = 0;
 
-      var game = {
-            wins: 0,
-            words: ["John Snow", "Cersei", "You know nothing", "dragon", "imp", "iron throne", "westeros", "Game of Thrones"],
-            currentWords: currentWord,
-            guessesRemaining: 10,
-            lettersGuessed: ""
-      }
 
-      // choosing words at random and setting to a variable
 
-      var randomWord = game.words[Math.floor(Math.random() * game.words.length)];
 
-      // Placing randomWord into an object where the keys will be the characters and values will be "_ "
+      // creating a reset game function
+      function resetGame() {
+            guessesRemaining = totalGuesses;
+            gameStart = false;
 
-      var charMap = {};
+            // Using Math.floor to round the random number down and select a word
+            randomWord = Math.floor(Math.random() * (words.length));
 
-      for (var char of randomWord) {
-            if (char == " ") {
-                  charMap[char] = " ";
-            } else {
-                  charMap[char] = "_";
-            };
+            // Emptying guesses
+            lettersGuessed = [];
+            wordBeingGuessed = [];
+
+            // Build the guessing word and clear it out
+            for (var i = 0; i < words[randomWord].length; i++) {
+                  wordBeingGuessed.push("_");
+            }
+            // Updating the html on the page
+            updateDisplay();
       };
 
-      var currentWord = Object.values(charMap).join(' ');
-      console.log(currentWord);
-      $("#word-guess h1").text("Word: " + currentWord);
-
-      document.onkeyup = function (event) {
-
-            var userGuess = event.key;
-            console.log(userGuess);
-
-            if (!userGuess.match(/[a-zA-Z]/)) {
-                  alert("Please only enter letters")
-            } else {
-                  if (!charMap[userGuess]) {
-                        game.lettersGuessed += userGuess;
-                        game.guessesRemaining--;
-                        currentWord = Object.values(charMap).join(' ');
-                  } else if (charMap[userGuess] == userGuess) {
-                        prompt("You already guessed that");
-                  } else {
-                        charMap[userGuess] = userGuess;
-                        currentWord = Object.values(charMap).join(' ');
-                        console.log(currentWord);
-                        $("#word-guess h1").text("Word: " + currentWord);
-                  }
-
-                  // jQuery pointers setup
-                  $("#word-guess h1").text("Word: " + currentWord);
-                  $("#wins h2").text("Wins: " + game.wins);
-                  $("#guessesRemaining h3").text("Number of guesses remaining: " + game.guessesRemaining);
-                  $("#letters-guessed h3").text("Letters already guessed: " + game.lettersGuessed);
 
 
 
-                  var winner = Object.values(charMap).includes("_");
-                  console.log(winner);
+      // changing html upon event
+      function updateDisplay() {
 
-                  if (game.guessesRemaining == 0) {
-                        alert("GAME OVER!");
-                        setTimeout(function () {
-                              game.guessesRemaining = 10;
-                              randomWord = game.words[Math.floor(Math.random() * game.words.length)];
-                              game.lettersGuessed = '';
-                        }, 3000);
-                  } else if (!winner) {
-                        alert("WINNER!");
-                        setTimeout(function () {
-                              game.guessesRemaining = 10;
-                              randomWord = game.words[Math.floor(Math.random() * game.words.length)];
-                              game.lettersGuessed = '';
-                              wins++;
-                        }, 3000);
-                  };
-
-                  return currentWord;
+            $("#wins h2").text(`Wins: ${wins}`);
+            $("#word-guess").text("");
+            for (var i = 0; i < wordBeingGuessed.length; i++) {
+                  document.getElementById("word-guess").innerText += wordBeingGuessed[i];
+            }
+            $("#guessesRemaining").text(`Number of guesses remaining: ${guessesRemaining}`);
+            $("#letters-guessed").text(`Letters already guessed: ${lettersGuessed}`);
+            if (guessesRemaining <= 0) {
+                  alert("Sorry, you are out of guesses. Better luck next time!")
+                  gameEnd = true;
             }
       };
 
 
-});
-// creating an object with randomGuess objects char being keys and values being _
 
-// the values will be looped and projected to screen. 
 
-// If the value is guessed, it will change to the CharacterData
+      document.onkeyup = function (event) {
+            var userGuess = event.key;
+            console.log(userGuess);
+            // If we finished a game, dump one keystroke and reset.
+            if (gameEnd) {
+                  resetGame();
+                  gameEnd = false;
+            } else {
+                  // Check to make sure a-z was pressed.
+                  if (userGuess.match(/[a-zA-Z]/)) {
+                        makeGuess(userGuess.toLowerCase());
+                        updateDisplay();
+                        checkWin();
+                        checkLoss();
+                  } else {
+                        alert("Please only enter letters");
+                  }
+            }
+      };
 
-// else the guess will be logged in letters-guessed, the guessRemaining will incrament down, 
 
-// if guesses = 0 then prompt gameover ,reset randomWord
-// if word to guess object value doesn't hold "_" prompt winner and incrament winner up, reset random word
 
-//ignore spaces
 
-//have it not run for all
+      function makeGuess(letter) {
+            if (guessesRemaining > 0) {
+                  if (!gameStart) {
+                        gameStart = true;
+                  }
+
+                  // Make sure we didn't use this letter yet
+                  if (lettersGuessed.indexOf(letter) === -1) {
+                        lettersGuessed.push(letter);
+                        evaluateGuess(letter);
+                  }
+            }
+      };
+
+
+
+      // This function takes a letter and finds all instances of 
+      // appearance in the string and replaces them in the guess word.
+      function evaluateGuess(letter) {
+            // Array to store positions of letters in string
+            var positions = [];
+
+            // Loop through word finding all instances of guessed letter, store the indicies in an array.
+            for (var i = 0; i < words[randomWord].length; i++) {
+                  if (words[randomWord][i] === letter) {
+                        positions.push(i);
+                  }
+            }
+
+            // if there are no indicies, remove a guess 
+            if (positions.length <= 0) {
+                  guessesRemaining--;
+            } else {
+                  // Loop through all the indicies and replace the '_' with a letter.
+                  for (var i = 0; i < positions.length; i++) {
+                        wordBeingGuessed[positions[i]] = letter;
+                  }
+            }
+      };
+
+
+      function checkWin() {
+            if (wordBeingGuessed.indexOf("_") === -1) {
+                  alert("Winner!!!");
+                  wins++;
+                  gameEnd = true;
+                  resetGame();
+            }
+      };
+
+
+      function checkLoss() {
+            if (guessesRemaining <= 0) {
+                  alert("Try again?")
+                  gameEnd = true;
+                  resetGame();
+            }
+      }
