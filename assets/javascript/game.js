@@ -59,12 +59,12 @@
       document.onkeyup = function (event) {
             var userGuess = event.key;
             console.log(userGuess);
-            // If we finished a game, dump one keystroke and reset.
+            // If we finished a game we will reset
             if (gameEnd) {
                   resetGame();
                   gameEnd = false;
             } else {
-                  // Check to make sure a-z was pressed.
+                  // Check to make sure a-z letters were pressed.
                   if (userGuess.match(/[a-zA-Z]/)) {
                         makeGuess(userGuess.toLowerCase());
                         updateDisplay();
@@ -95,13 +95,12 @@
 
 
 
-      // This function takes a letter and finds all instances of 
-      // appearance in the string and replaces them in the guess word.
+      //function to review guess
       function evaluateGuess(letter) {
-            // Array to store positions of letters in string
+            // Array will store positions in string
             var positions = [];
 
-            // Loop through word finding all instances of guessed letter, store the indicies in an array.
+            // Looping through word finding all instances of guessed letter, store the indicies in an array.
             for (var i = 0; i < words[randomWord].length; i++) {
                   if (words[randomWord][i] === letter) {
                         positions.push(i);
